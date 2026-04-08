@@ -26,6 +26,32 @@ fn show_menu() {
         println!("4. Exit");
 }
 
+struct Statistics {
+    count: usize,
+    average: f64,
+    highest: i32,
+    lowest: i32,
+}
+
+fn compute_statistics(scores: &[i32]) -> Statistics {
+    let count = scores.len();
+    let sum: i32 = scores.iter().sum();
+    let average = sum as f64 / count as f64;
+    let highest = *scores.iter().max().unwrap(); // Safe caller guarantees non-empty
+    let lowest = *scores.iter().min().unwrap();
+
+    Statistics { count, average, highest, lowest}
+}
+
+impl Statistics {
+    fn display(&self) {
+        println!("\nScores Count: {}", self.count);
+        println!("Average Score: {:.0}", self.average);
+        println!("Highest Score: {}", self.highest);
+        println!("Lowest Score: {}", self.lowest);
+    }
+}
+
 enum MenuOption {
     AddScore,
     ViewScores,
@@ -105,35 +131,11 @@ fn view_scores(scores: &[i32]) {  // Borrows scores &Vec<i32>, displays as i32
             println!("{}", score);
         }
         
-        println!("\nScores Count: {}", scores.len());
-
-        // average score calculation
-        let sum: i32 = scores.iter().sum();
-
-        let average_score: f64 = sum as f64 / scores.len() as f64;
-
-        println!("Average Score: {:.0}", average_score);
-
-        // highest score determinant
-        if let Some(highest_score) = scores.iter().max() {
-            println!("Highest Score: {}", highest_score);
-        }
-
-        // lowest score determinant
-        if let Some(lowest_score) = scores.iter().min() {
-            println!("Lowest Score: {}", lowest_score);    
-        }
-
-        // Input for 'Exit' to exit loop
-        let mut input = String::new();
-        
-        println!("Type 'Exit' to exit: ");
-        
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read input!");
-                    
-        let trimmed = input.trim();
+        // compute once, compute via method
+        let stats = compute_statistics(scores);
+        stats.display();
+     
+        let trimmed = read_input("\nType 'exit' to return to Menu: ");
         
         if trimmed.eq_ignore_ascii_case("exit") {
             println!("Exiting...Back to Main Menu!");
