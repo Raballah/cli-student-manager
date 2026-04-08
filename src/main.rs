@@ -66,15 +66,7 @@ fn add_score(scores: &mut Vec<i32>) {  // Modifies the scores mut vector, borrow
     // Add student score
     loop {
         // score entry validation
-        let mut input = String::new();
-
-        println!("\nEnter Student Score or 'exit' to Exit: ");
-
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read input!");
-        
-        let trimmed = input.trim();
+        let trimmed = read_input("\nEnter Student Score or 'exit' to Exit: ");
 
         if trimmed.eq_ignore_ascii_case("exit") {
             println!("Score(s) Added. Returning to Menu...");
