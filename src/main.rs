@@ -40,7 +40,12 @@ fn compute_statistics(scores: &[i32]) -> Statistics {
     let highest = *scores.iter().max().unwrap(); // Safe caller guarantees non-empty
     let lowest = *scores.iter().min().unwrap();
 
-    Statistics { count, average, highest, lowest}
+    Statistics { 
+        count, 
+        average, 
+        highest,
+        lowest
+    }
 }
 
 impl Statistics {
