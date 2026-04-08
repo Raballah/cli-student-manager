@@ -5,6 +5,18 @@
 
 use std::io;
 
+// Extracted input reading into a single function
+fn read_input(prompt: &str) -> String {
+    let mut input = String::new();
+    println!("{}", prompt);
+
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read input!");
+    
+    input.trim().to_string()
+}
+
 fn show_menu() {
     println!("\n=== Student Score Manager ===");
 
@@ -33,15 +45,9 @@ fn parse_menu_choice(input: i32) -> Option<MenuOption>{
 
 fn get_user_input() -> MenuOption {
     loop {
-        let mut menu_choice = String::new();
-        println!("\nEnter your choice: ");
-        
-        io::stdin()
-            .read_line(&mut menu_choice)
-            .expect("Failed to read menu choice");
-        
-        // parse to i32, convert to MenuOption
-        if let Ok(num) = menu_choice.trim().parse::<i32>() {
+        let menu_choice = read_input("\nEnter your choice: ");
+
+        if let Ok(num) = menu_choice.parse::<i32>() {
             if let Some(option) = parse_menu_choice(num) {
                 break option; // Valid MenuOption, exit loop
             }
