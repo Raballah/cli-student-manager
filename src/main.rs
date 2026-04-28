@@ -39,6 +39,48 @@ impl fmt::Display for PassStatus {
     }
 }
 
+enum Grade {
+    A,
+    B,
+    C,
+    D,
+    F,
+}
+
+impl fmt::Display for Grade {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let s = match self {
+            Grade::A => "A",
+            Grade::B => "B",
+            Grade::C => "C",
+            Grade::D => "D",
+            Grade::F => "F",
+        };
+        write!(f, "{}", s)
+    }
+}
+
+enum Performance {
+    Excellent,
+    Good,
+    Average,
+    Weak,
+    Poor,
+}
+
+impl fmt::Display for Performance {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let performance = match self {
+            Performance::Excellent => "Excellent",
+            Performance::Good => "Good",
+            Performance::Average => "Average",
+            Performance::Weak => "Weak",
+            Performance::Poor => "Poor",
+        };
+        write!(f, "{}", performance)
+    }
+}
+
 struct Student {
     name: String,
     score: i32,
@@ -105,27 +147,6 @@ impl Student {
     }
 }
 
-enum Grade {
-    A,
-    B,
-    C,
-    D,
-    F,
-}
-
-impl fmt::Display for Grade {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let s = match self {
-            Grade::A => "A",
-            Grade::B => "B",
-            Grade::C => "C",
-            Grade::D => "D",
-            Grade::F => "F",
-        };
-        write!(f, "{}", s)
-    }
-}
-
 struct Statistics {
     count: usize,
     average: f64,
@@ -152,27 +173,6 @@ impl Statistics {
     }
 }
 
-enum Performance {
-    Excellent,
-    Good,
-    Average,
-    Weak,
-    Poor,
-}
-
-impl fmt::Display for Performance {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let performance = match self {
-            Performance::Excellent => "Excellent",
-            Performance::Good => "Good",
-            Performance::Average => "Average",
-            Performance::Weak => "Weak",
-            Performance::Poor => "Poor",
-        };
-        write!(f, "{}", performance)
-    }
-}
-
 enum MenuOption {
     AddScore,
     ViewScores,
@@ -187,6 +187,21 @@ fn parse_menu_choice(input: i32) -> Option<MenuOption>{
         3 => Some(MenuOption::AnalyzeScores),
         4 => Some(MenuOption::Exit),
         _ => None, // All i32 inputs are invalid
+    }
+}
+
+fn get_user_input() -> MenuOption {
+    loop {
+        let menu_choice = read_input("\nEnter your choice: ");
+
+        if let Ok(num) = menu_choice.parse::<i32>() {
+            if let Some(option) = parse_menu_choice(num) {
+                break option; // Valid MenuOption, exit loop
+            }
+        }
+        // if parse failed or choice selected not 1-4
+        println!("Invalid Entry. Choice must be from 1-4!");
+        continue;
     }
 }
 
@@ -245,7 +260,7 @@ impl App {
         let score: i32 = match trimmed_score.parse::<i32>() {
             Ok(num) => num,
             Err(_) => {
-                println!("Invalid Entry. Score Must be From 0-100.");
+                println!("Invalid Entry. Score must be a number, 0-100.");
                 continue;
             }
          };
@@ -337,21 +352,6 @@ impl App {
                 break;            
             }
         }
-    }
-}
-
-fn get_user_input() -> MenuOption {
-    loop {
-        let menu_choice = read_input("\nEnter your choice: ");
-
-        if let Ok(num) = menu_choice.parse::<i32>() {
-            if let Some(option) = parse_menu_choice(num) {
-                break option; // Valid MenuOption, exit loop
-            }
-        }
-        // if parse failed or number number not 1-4
-        println!("Invalid Entry. Choice must be from 1-4!");
-        continue;
     }
 }
 
