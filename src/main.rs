@@ -217,6 +217,7 @@ impl App {
         }
     }
 
+    // app main method
     fn run(&mut self) {
         loop {
             // 2. Menu System (Core Feature)
@@ -237,6 +238,8 @@ impl App {
             }
         }
     }
+
+    // Inner app functions for actions.
 
     fn add_student(&mut self) {  // Modifies the scores mut vector, borrowed here.
         
